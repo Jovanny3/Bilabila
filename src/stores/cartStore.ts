@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import type { IProduct } from "../@types";
+import { products } from "../data/product";
 
 interface ICart {
   quantity: number;
@@ -12,6 +13,7 @@ interface ICartStore {
   totalQuantity: () => number;
   removeProduct: (productId: number) => void;
   updateQuantity: (productId: number, quantity: number) => void;
+  clearCart: () => void;
 }
 
 const useCartStore = create<ICartStore>((set, get) => ({
@@ -41,6 +43,10 @@ const useCartStore = create<ICartStore>((set, get) => ({
     updatedProducts.delete(productId);
     set({ products: updatedProducts });
   },
+  clearCart: () => {
+    set({ products: new Map() });
+  },
+
   totalQuantity: () => {
     const products = get().products;
     return Array.from(products.values()).reduce(
